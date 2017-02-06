@@ -43,10 +43,13 @@ void add_element( linked_list *list, void *element)
         temp = (linked_list*)malloc( sizeof( linked_list ) );
         temp = &list;
         
-        while(temp->next != 0 )
+        while(list->next != 0 )
         {
             printf("print from inside loop: %i\n", count);
-            printf("list->next: %i\n", &temp->next);
+            if(&temp->next != 0)
+            {
+                printf("list->next: %i \n", &temp->next->data);
+            }
             temp = temp->next;
             count++;
         }

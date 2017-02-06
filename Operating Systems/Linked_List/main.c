@@ -34,12 +34,15 @@ int main(int argc, char** argv) {
     int num = 14;
     add_element(&list1, &num);
     
+    printf("first item %d", list1->data);
+    
     int num2 = 17;
     add_element(&list1, &num2);
     
+    /*
     int num3 = 19;
     add_element(&list1, &num3);
-    
+    */
     
     return (EXIT_SUCCESS);
 }
