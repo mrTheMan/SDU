@@ -32,9 +32,8 @@ int main(int argc, char** argv) {
     list1 = init_linked_list();
     
     int num = 14;
-    add_element(&list1, &num);
     
-    printf("first item %d", list1->data);
+    add_element(&list1, &num);
     
     int num2 = 17;
     add_element(&list1, &num2);

@@ -24,6 +24,7 @@ linked_list *init_linked_list()
     }
     
     newList->data = malloc( sizeof( newList->data ) );
+    newList->data = NULL_POINTER;
     newList->next = malloc( sizeof( newList->next ) );
     newList->next = NULL_POINTER;
     newList->previous = malloc( sizeof( newList->previous ) );
@@ -38,20 +39,18 @@ void add_element( linked_list *list, void *element)
 {
     if(list->data != 0)
     {
-        int count = 1;
+        
         linked_list *temp;
         temp = (linked_list*)malloc( sizeof( linked_list ) );
         temp = &list;
         
-        while(list->next != 0 )
+        while((int)temp->data != 0)
         {
-            printf("print from inside loop: %i\n", count);
             if(&temp->next != 0)
             {
-                printf("list->next: %i \n", &temp->next->data);
+                printf("list->next: %i \n", (int)temp->next->data);
             }
             temp = temp->next;
-            count++;
         }
         
         
@@ -66,8 +65,6 @@ void add_element( linked_list *list, void *element)
         newList->previous = &temp;
         
         temp->next = &newList;
-        
-        
         
         
     } else {
