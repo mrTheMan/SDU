@@ -4,19 +4,30 @@
  * and open the template in the editor.
  */
 #include <stdio.h>
+#include <stdlib.h>
 #include "linked_list.h"
-#define NULL 0
+
+#define NULL_POINTER ( (void *) 0)
+
+linked_list *head = NULL_POINTER;
 
 
 linked_list *init_linked_list()
 {
     
     linked_list *newList;
-    newList = malloc( sizeof( newList ) );
+    newList = (linked_list*)malloc( sizeof( linked_list ) );
     
-    newList->data = NULL;
-    newList->next = NULL;
-    newList->previous = NULL;
+    if(newList == 0)
+    {
+        printf("%d\n", *newList);
+    }
+    
+    newList->data = malloc( sizeof( newList->data ) );
+    newList->next = malloc( sizeof( newList->next ) );
+    newList->next = NULL_POINTER;
+    newList->previous = malloc( sizeof( newList->previous ) );
+    newList->previous = NULL_POINTER;
     
     printf("Empty linked list pointer created\n");
     
@@ -25,12 +36,43 @@ linked_list *init_linked_list()
 
 void add_element( linked_list *list, void *element)
 {
-    int count = 1;
-    while(list->next != 0 )
+    if(list->data != 0)
     {
-        printf("print from inside loop %i", count);
-        count++;
+        int count = 1;
+        linked_list *temp;
+        temp = (linked_list*)malloc( sizeof( linked_list ) );
+        temp = &list;
+        
+        while(temp->next != 0 )
+        {
+            printf("print from inside loop: %i\n", count);
+            printf("list->next: %i\n", &temp->next);
+            temp = temp->next;
+            count++;
+        }
+        
+        
+        linked_list *newList;
+        newList = (linked_list*)malloc( sizeof( linked_list ) );
+
+        newList->data = malloc( sizeof( newList->data ) );
+        newList->data = element;
+        newList->next = malloc( sizeof( newList->next ) );
+        newList->next = NULL_POINTER;
+        newList->previous = malloc( sizeof( newList->previous ) );
+        newList->previous = &temp;
+        
+        temp->next = &newList;
+        
+        
+        
+        
+    } else {
+        
+        list->data = element;
+    
     }
+    
      
 }
 

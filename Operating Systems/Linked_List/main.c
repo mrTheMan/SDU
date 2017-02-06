@@ -25,18 +25,24 @@ int rand_range(int min_n, int max_n)
     return rand() % (max_n - min_n + 1) + min_n;
 }
 
-
 int main(int argc, char** argv) {
     
+    linked_list *list1;
     
-    linked_list myList;
+    list1 = init_linked_list();
     
-    myList = *init_linked_list();
+    int num = 14;
+    add_element(&list1, &num);
     
-    printf("after creation");
+    int num2 = 17;
+    add_element(&list1, &num2);
     
-    //add_element(&myList,(int) *12);
+    int num3 = 19;
+    add_element(&list1, &num3);
+    
     
     return (EXIT_SUCCESS);
 }
+
+
 
