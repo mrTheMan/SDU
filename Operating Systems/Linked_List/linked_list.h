@@ -16,7 +16,7 @@ linked_list *init_linked_list();
 /*
  * Adds the supplied element to the end of the list
  */
-void add_element( linked_list *list, void *element);
+void add_element( linked_list *list, int element);
 
 /*
  * Returns the number of elements in the list
@@ -32,6 +32,6 @@ void *remove_first(linked_list *list);
  * Remove the first element from the list that has the same value as supplied in element.
  * If the element is not found, -1 is returned, if found and removed 0 is returned.
  */
-int remove_element(linked_list *list, void *element);
+int remove_element(linked_list *list, int element);
 
 #endif /* LINKED_LIST_H_ */

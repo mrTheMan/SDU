@@ -7,10 +7,6 @@
 #include <stdlib.h>
 #include "linked_list.h"
 
-#define NULL_POINTER ( (void *) 0)
-
-linked_list *head = NULL_POINTER;
-
 
 linked_list *init_linked_list()
 {
@@ -18,61 +14,93 @@ linked_list *init_linked_list()
     linked_list *newList;
     newList = (linked_list*)malloc( sizeof( linked_list ) );
     
-    if(newList == 0)
-    {
-        printf("%d\n", *newList);
-    }
+    newList->data = 0;
+    newList->next = 0;
+    newList->previous = 0;
     
-    newList->data = malloc( sizeof( newList->data ) );
-    newList->data = NULL_POINTER;
-    newList->next = malloc( sizeof( newList->next ) );
-    newList->next = NULL_POINTER;
-    newList->previous = malloc( sizeof( newList->previous ) );
-    newList->previous = NULL_POINTER;
     
-    printf("Empty linked list pointer created\n");
-    
-    return &newList;
+    return newList;
 }
 
-void add_element( linked_list *list, void *element)
+void add_element( linked_list *list, int element)
 {
+    
     if(list->data != 0)
     {
-        
-        linked_list *temp;
-        temp = (linked_list*)malloc( sizeof( linked_list ) );
-        temp = &list;
-        
-        while((int)temp->data != 0)
+        while(list->next != 0)
         {
-            if(&temp->next != 0)
-            {
-                printf("list->next: %i \n", (int)temp->next->data);
-            }
-            temp = temp->next;
+            list = list->next;
         }
         
+        linked_list *temp = malloc( sizeof( linked_list ) );
+        temp->data = element;
+        temp->next = 0;
+        temp->previous = list;
+        list->next = temp;
         
-        linked_list *newList;
-        newList = (linked_list*)malloc( sizeof( linked_list ) );
-
-        newList->data = malloc( sizeof( newList->data ) );
-        newList->data = element;
-        newList->next = malloc( sizeof( newList->next ) );
-        newList->next = NULL_POINTER;
-        newList->previous = malloc( sizeof( newList->previous ) );
-        newList->previous = &temp;
-        
-        temp->next = &newList;
-        
-        
-    } else {
-        
+    } else{
         list->data = element;
-    
+        list->next = 0;
     }
-    
-     
 }
 
+void print_all(linked_list *list)
+{
+    while(list != 0)
+    {
+        printf("Value: %i \n", (int)list->data);
+        list = list->next;
+    }
+}
+
+int linked_list_size(linked_list *list)
+{
+    int count = 0;
+    while(list != 0)
+    {
+        list = list->next;
+        count++;
+    }
+    
+    return count;
+}
+
+void *remove_first(linked_list *list)
+{
+    int value = list->data;
+    
+    *list = *list->next;
+    
+    return value;
+}
+
+int remove_element(linked_list *list, int element)
+{
+    int count = 0;
+    while(list != 0)
+    {
+        int num = (int)list->data;
+        if(num == element)
+        {
+            // if it is not the first element
+            if(count > 0)
+            {
+                if(list->previous->next != 0 && list->next != 0)
+                {
+                    *list->previous->next = *list->next;
+                } else {
+                    list->previous->next = 0;
+                }
+                return num; 
+            } else{
+                // count == 0, therefore remove first element
+                return (int)remove_first(list);
+            }
+        } 
+        
+        count++;
+        list = list->next;
+    }
+    
+    return 0;
+}
