@@ -11,42 +11,42 @@ class TV():
         self.state = 0
         self.volume = 20
 
-    def PowerOn(self):
+    def poweroN(self):
         self.state = 1
         self.channel = 1
         return self
 
-    def PowerOff(self):
+    def powerofF(self):
         self.state = 0
         self.channel = 0
         self.volume = 20
         return self
 
-    def ChannelUp(self):
-        if self.channel <= 100:
+    def channeluP(self):
+        if self.channel <= 100 and self.state != 0:
             self.channel = self.channel + 1
         return self
 
-    def ChannelDown(self):
-        if self.channel > 0:
+    def channeldowN(self):
+        if self.channel > 0 and self.state != 0:
             self.channel = self.channel - 1
         return self
 
     def ChannelSet(self, channel):
-        if channel >= 0 and channel <= 100:
+        if channel >= 0 and channel <= 100 and self.state != 0:
             self.channel = channel
         return self
 
-    def VolumeUp(self):
-        if self.volume < 100:
+    def volumeuP(self):
+        if self.volume < 100 and self.state != 0:
             if(self.volume + 2) > 100:
                 self.volume = 100
             else:
                 self.volume = self.volume + 2
         return self
 
-    def VolumeDown(self):
-        if self.volume > 0:
+    def volumedowN(self):
+        if self.volume > 0 and self.state != 0:
             if (self.volume - 2) < 0:
                 self.volume = 0
             else:
@@ -54,12 +54,12 @@ class TV():
         return self
 
     def VolumeSet(self, volume):
-        if volume >= 0 and volume <= 100:
+        if volume >= 0 and volume <= 100 and self.state != 0:
             self.volume = volume
 
         return self
 
-    def Print(self):
+    def prinT(self):
         print("Channel: " + str(self.channel))
         if self.state == 0:
             print("State: OFF")
@@ -70,12 +70,30 @@ class TV():
         print("")
         return self
 
+
+    def __getattr__(self, item):
+
+        method_list = [func for func in dir(TV) if callable(getattr(TV, func)) and not func.startswith("__")]
+
+
+        for s in method_list:
+            if s.lower() == item.lower():
+                method = getattr(self, s)
+                method()
+
+        print("")
+
+        return self
+
+
 {
 
     TV().
-        PowerOn().
-            ChannelUp().
-            ChannelUp().
-        Print().VolumeSet(1).Print().VolumeDown().Print().VolumeDown().Print()
+        PowerOn.
+            ChannelSet(34).
+            VolumeSet(56).
+        Print
 
 }
+
+
