@@ -85,11 +85,12 @@ class TV():
 
         return self
 
+TV = TV()
+
 
 {
 
-    TV().
-        PowerOn.
+    TV.PowerOn.
             ChannelSet(34).
             VolumeSet(56).
         Print
