@@ -11,23 +11,23 @@ class TV():
         self.state = 0
         self.volume = 20
 
-    def poweroN(self):
+    def poweron_f(self):
         self.state = 1
         self.channel = 1
         return self
 
-    def powerofF(self):
+    def poweroff_f(self):
         self.state = 0
         self.channel = 0
         self.volume = 20
         return self
 
-    def channeluP(self):
+    def channelup_f(self):
         if self.channel <= 100 and self.state != 0:
             self.channel = self.channel + 1
         return self
 
-    def channeldowN(self):
+    def channeldown_f(self):
         if self.channel > 0 and self.state != 0:
             self.channel = self.channel - 1
         return self
@@ -37,7 +37,7 @@ class TV():
             self.channel = channel
         return self
 
-    def volumeuP(self):
+    def volumeup_f(self):
         if self.volume < 100 and self.state != 0:
             if(self.volume + 2) > 100:
                 self.volume = 100
@@ -45,7 +45,7 @@ class TV():
                 self.volume = self.volume + 2
         return self
 
-    def volumedowN(self):
+    def volumedown_f(self):
         if self.volume > 0 and self.state != 0:
             if (self.volume - 2) < 0:
                 self.volume = 0
@@ -59,7 +59,7 @@ class TV():
 
         return self
 
-    def prinT(self):
+    def print_f(self):
         print("Channel: " + str(self.channel))
         if self.state == 0:
             print("State: OFF")
@@ -77,7 +77,8 @@ class TV():
 
 
         for s in method_list:
-            if s.lower() == item.lower():
+
+            if s.lower() == item.lower() + "_f":
                 method = getattr(self, s)
                 method()
 
@@ -91,7 +92,9 @@ TV = TV()
 {
 
     TV.PowerOn.
+            ChannelUp.
             ChannelSet(34).
+            VolumeUp.
             VolumeSet(56).
         Print
 
