@@ -32,7 +32,7 @@ class TV():
             self.channel = self.channel - 1
         return self
 
-    def ChannelSet(self, channel):
+    def channelset_f(self, channel):
         if channel >= 0 and channel <= 100 and self.state != 0:
             self.channel = channel
         return self
@@ -53,12 +53,11 @@ class TV():
                 self.volume = self.volume - 2
         return self
 
-    def VolumeSet(self, volume):
+    def volumeset_f(self, volume):
         if volume >= 0 and volume <= 100 and self.state != 0:
             self.volume = volume
 
         return self
-
     def print_f(self):
         print("Channel: " + str(self.channel))
         if self.state == 0:
@@ -86,6 +85,21 @@ class TV():
 
         return self
 
+    def __call__(self, item, *args):
+        method_list = [func for func in dir(TV) if callable(getattr(TV, func)) and not func.startswith("__")]
+        print(args)
+
+        for s in method_list:
+
+            if s.lower() == item.lower() + "_f":
+                method = getattr(self, s)
+                method(item)
+
+        print("")
+
+        print("")
+        return self
+
 TV = TV()
 
 
@@ -93,9 +107,7 @@ TV = TV()
 
     TV.PowerOn.
             ChannelUp.
-            ChannelSet(34).
-            VolumeUp.
-            VolumeSet(56).
+            channelset(34).
         Print
 
 }
