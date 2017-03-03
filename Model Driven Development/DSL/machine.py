@@ -11,8 +11,23 @@ class state():
 
 class transition():
     end = ""
+    events = []
+
     def __init__(self, end):
         self.end = end
+
+    def addEvent(self, event):
+        self.events.append(event)
+
+class event():
+    transition = ""
+    variable = ""
+    value = 0
+
+    def __init__(self,transition, variable, value):
+        self.transition = transition
+        self.variable = variable
+        self.value = value
 
 class variable():
     name = ""
@@ -31,6 +46,9 @@ class variable():
     def decrease(self):
         if self.value > self.min_value:
             self.value -= 1
+    def setVariable(self, value):
+        if self.value > self.min_value and self.value < self.max_value:
+            self.value = value
 
 class machine():
 
@@ -60,6 +78,17 @@ class machine():
         self.list_state[self.current_count].setTransition(newTransition)
         return self
 
+    def variable(self, name, min, max):
+        newVar = variable(name,min,max)
+        self.list_var.append(newVar)
+        return self
+
+    def addEvent(self,transition, variable, value):
+        index = (len(self.state.transition) -1)
+        newEvent = event(transition,variable,value)
+        self.state.transition[index].addEvent(newEvent)
+        return self
+
     def execute(self,execute_list):
 
         for i in range(len(execute_list)):
@@ -86,22 +115,55 @@ class machine():
         for i in self.state.transition:
             if i.end.lower() == new_state.name.lower():
                 print("Transition from " + self.state.name + " to " + new_state.name)
+                for event in i.events:
+                    if event.transition == i.end:
+                        for v in self.list_var:
+                            if v.name == event.variable:
+                                print("Variable " + v.name + " changed from " + str(v.value) + " to " + str(event.value))
+                                v.setVariable(event.value)
+
                 self.state = new_state
 
-    def variable(self,name, min,max):
-        newVar = variable(name,min,max)
-        self.list_var.append(newVar)
-        return self
+
+class interperter():
+    stm = 0
+
+    def __init__(self, statemachine):
+        self.stm = statemachine
+
 
     def print(self):
-        print(self.name)
-        for v in self.list_var:
-            print("Variable " + v.name + " Min: " + str(v.min_value) + " Max: " + str(v.max_value) + " Value: " + str(v.value) )
+        print(self.stm.name)
+        print("Current state: " + self.stm.state.name)
+        for v in self.stm.list_var:
+            print("Variable " + v.name + " Min: " + str(v.min_value) + " Max: " + str(v.max_value) + " Value: " + str(
+                v.value))
 
-        for i in self.list_state:
+        for i in self.stm.list_state:
             print("State: " + i.name)
             for j in i.transition:
                 print("Transition: " + i.name + " " + j.end)
+
+class querybuilder():
+
+    query = []
+
+    def changeStateTo(self, name):
+        self.query.append(name)
+        return self
+
+    def incrementVariable(self, var):
+        self.query.append(var)
+        self.query.append("up")
+        return self
+
+    def decrementVariable(self, var):
+        self.query.append(var)
+        self.query.append("down")
+        return self
+
+    def print(self):
+        return self.query
 
 
 
@@ -113,24 +175,23 @@ TV = machine()
         variable("Channel",0,100).
             state_add("ON").
                 transition("OFF").
+                    addEvent("OFF","Volume", 0).
+                    addEvent("OFF","Channel", 0).
             state_add("OFF").
-                transition("ON").
-                transition("NONE").
-            state_add("NONE")
+                transition("ON")
 
 }
 
 
 print(TV.name)
 
-print("")
-
-#TV.execute(["ON", "OFF", "OFF", "OFF", "NONE"])
-
-TV.execute(["ON", "OFF", "ON","Channel", "UP","Volume", "UP", "Volume", "UP", "Volume", "DOWN", "NONE", "OFF", ])
+print(interperter(TV).print())
 
 print("")
 
+TV.execute(querybuilder().changeStateTo("OFF").changeStateTo("ON").incrementVariable("Volume").query)
 
 
+print("")
 
+print(interperter(TV).print())
